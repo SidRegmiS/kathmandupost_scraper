@@ -1,8 +1,8 @@
 #importing dateTime for file creating and storing informations into a file
 import datetime
 
-import requests
-import urllib
+
+
 import sys
 import os
 
@@ -14,7 +14,8 @@ from selenium.webdriver.common.by import By
 
 
 
-#functions used during scraping logic and storing data
+#functions used during scraping logic and storing data\
+#function to create a directory of the data that needs to be stored. 
 def createDataFolder(directory):
     try:
         if not os.path.exists(directory):
@@ -67,7 +68,12 @@ responsiveImages = driver.find_elements(By.XPATH,"//img[contains(@class,'img-res
 imgsrc = []
 
 for img in responsiveImages:
-    imgsrc.append(img.get_attribute('src'))
+    imgsrc.append(str(img.get_attribute('src')))
+
+#for now we write all the img src to the file
+datafile.write("ALL IMG SRCS\n\n")
+datafile.writelines(imgsrc)
+datafile.write("\n")
 
 
 #here i tried to download the images but the server doesn't let us get these images. 403: Forbiden. :(
