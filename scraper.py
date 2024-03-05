@@ -54,7 +54,8 @@ driver = webdriver.Chrome(
 )
 
 # visit your target site
-driver.get('https://kathmandupost.com/')
+site = 'https://kathmandupost.com/'
+driver.get(site)
 
 
 # scraping logic...
@@ -193,19 +194,41 @@ visualStories = driver.find_element(By.XPATH, visualStories_XPATH)
 
 #TODO:FIX THIS CAUSE IDK WHY IT WON'T LET ME CLICK right after i referecne it damn thing
 #visualStories_links = visualStories.find_element(By.TAG_NAME, 'figure').click()
-
-
-#both the text and images will take the diver to the 
-
-
-t.sleep(10)
-
 #creating the visual story
 visual_Datafile_Location_name = directory + "visual_Stories" + ".txt"
 
 visual_Datafile = open(visual_Datafile_Location_name, 'w')
 
 visual_Datafile.write("VISUAL STOREIS")
+
+#both the text and images will take the diver to the 
+
+visualStories_a = driver.find_element(By.XPATH, visualStories_XPATH).find_elements(By.TAG_NAME, 'a')
+visualStories_links = []
+
+for a in visualStories_a:
+    visualStories_links.append(a.get_attribute("href"))
+
+visualStories_links.pop(0)
+visualStories_links.pop(1)
+visualStories_links.pop(2)
+visualStories_links.pop(3)
+
+for page in visualStories_links:
+    driver.get(page)
+    page_row_XPATH = '/html/body/div[3]/main/div[2]/div'
+    page_row = driver.find_element(By.XPATH, '/html/body/div[3]/main/div[2]/div')
+    page_title = page_row.find_element(By.TAG_NAME, 'h1')
+    page_subTitle = page_row.find_element(By.TAG_NAME, 'span')
+    print(page_title.text)
+    print(page_subTitle.text)
+
+
+
+
+
+driver.get(site)
+
 
 #print(visualStories_links)
 
@@ -215,7 +238,7 @@ visual_Datafile.write("VISUAL STOREIS")
     #
 
 datafile.write('\nVisual Stories\n')
-
+visualStories = driver.find_element(By.XPATH, visualStories_XPATH)
 datafile.writelines(visualStories.text)
 
 
