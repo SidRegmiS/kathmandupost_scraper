@@ -1,8 +1,6 @@
 #importing dateTime for file creating and storing informations into a file
-import datetime
-
-
-
+import time as t
+import datetime 
 import sys
 import os
 
@@ -42,7 +40,7 @@ directory = "./" + fileName + "_dir/"
 createDataFolder(directory)
 #we write to file while scraping the data
 
-dataFileLocation = directory + fileName
+dataFileLocation = directory + fileName + ".txt"
 
 datafile = open(dataFileLocation, 'w') #creates the file 
 
@@ -190,6 +188,32 @@ visualStories_XPATH = "/html/body/div[4]/main/div/div[5]/div"
 
 #TODO: get the images and other stuff of the articles 
 visualStories = driver.find_element(By.XPATH, visualStories_XPATH)
+
+#this section has 4 different links that needs to be clicked then saved to its own file
+
+#TODO:FIX THIS CAUSE IDK WHY IT WON'T LET ME CLICK right after i referecne it damn thing
+#visualStories_links = visualStories.find_element(By.TAG_NAME, 'figure').click()
+
+
+#both the text and images will take the diver to the 
+
+
+t.sleep(10)
+
+#creating the visual story
+visual_Datafile_Location_name = directory + "visual_Stories" + ".txt"
+
+visual_Datafile = open(visual_Datafile_Location_name, 'w')
+
+visual_Datafile.write("VISUAL STOREIS")
+
+#print(visualStories_links)
+
+
+
+
+    #
+
 datafile.write('\nVisual Stories\n')
 
 datafile.writelines(visualStories.text)
@@ -435,13 +459,14 @@ for section in listOfUls:
 
 
 
-
-
 datafile.close()
 
+"""
 dataFileRead = open(dataFileLocation, 'r')
 print(dataFileRead.read())
 dataFileRead.close()
+
+"""
 
 # release the resources allocated by Selenium and shut down the browser
 driver.quit()
