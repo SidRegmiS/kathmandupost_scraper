@@ -220,8 +220,51 @@ for page in visualStories_links:
     page_row = driver.find_element(By.XPATH, '/html/body/div[3]/main/div[2]/div')
     page_title = page_row.find_element(By.TAG_NAME, 'h1')
     page_subTitle = page_row.find_element(By.TAG_NAME, 'span')
+    image_srcs = page_row.find_elements(By.TAG_NAME, 'img')
+    figCaptionTitle = page_row.find_element(By.TAG_NAME, 'figcaption')
+    articleAuthor = page_row.find_element(By.TAG_NAME, 'h5')
+    published_updated_time = page_row.find_elements(By.CLASS_NAME, "updated-time")
+
+    print()
     print(page_title.text)
     print(page_subTitle.text)
+    print("TITLE IMAGE")
+    print(image_srcs[0].get_attribute('src'))
+    print(figCaptionTitle.text)
+    print()
+    print("By " + articleAuthor.text)
+    print(published_updated_time[0].text)
+    print(published_updated_time[1].text)
+    
+    page_images_xpath = "/html/body/div[3]/main/div[2]/div/div/div[2]/div/div[6]"
+    page_article = page_row.find_element(By.XPATH, page_images_xpath)
+
+    page_article_imgs = page_article.find_elements(By.TAG_NAME, 'img')
+    page_article_figcaptions = page_article.find_elements(By.TAG_NAME, 'figcaption')
+
+
+    print("\nARTICLE IMAGES AND CAPTIONS")
+
+    
+    for i in range(len(page_article_figcaptions)):
+        check_src = str(page_article_imgs[i].get_attribute('src'))
+
+
+        if(check_src == 'None'):
+            print(page_article_imgs[i].get_attribute('data-src'))
+        else:
+            print(check_src)        
+
+        print(page_article_figcaptions[i].text)
+        
+
+    
+    
+    
+
+    
+
+
 
 
 
