@@ -9,6 +9,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 
 
@@ -21,7 +22,15 @@ def createDataFolder(directory):
     except OSError:
         print ('Warining: Creating directory. ' +  directory)
 
+#the website sometimes has data images so sometimes you can't just check the src
+#retruns the src 
+def getImageSrc(image_element):
+    check_src = str(image_element.get_attribute('src'))
 
+    if(check_src == 'None'):
+        return str(image_element.get_attribute('data-src'))
+    else:
+        return check_src
 
 
 
@@ -199,7 +208,7 @@ visual_Datafile_Location_name = directory + "visual_Stories" + ".txt"
 
 visual_Datafile = open(visual_Datafile_Location_name, 'w')
 
-visual_Datafile.write("VISUAL STOREIS")
+visual_Datafile.write("VISUAL STOREIS"+"\n")
 
 #both the text and images will take the diver to the 
 
@@ -221,41 +230,76 @@ for page in visualStories_links:
     page_title = page_row.find_element(By.TAG_NAME, 'h1')
     page_subTitle = page_row.find_element(By.TAG_NAME, 'span')
     image_srcs = page_row.find_elements(By.TAG_NAME, 'img')
-    figCaptionTitle = page_row.find_element(By.TAG_NAME, 'figcaption')
+    figCaptionTitle = ""
+
+   
+
+  
+
+    
+    visual_Datafile.write("\n")
+    visual_Datafile.write(page_title.text + "\n")
+    visual_Datafile.write(page_subTitle.text + "\n")
+    visual_Datafile.write("\nTITLE IMAGE"+"\n")
+    visual_Datafile.write(getImageSrc(image_srcs[0]) + "\n")
+    
+    
+
+    try:
+        figCaptionTitle = page_row.find_element(By.TAG_NAME, 'figcaption')
+        visual_Datafile.write(figCaptionTitle.text + "\n\n")
+    except NoSuchElementException:
+        figCaptionTitle = ""
+        visual_Datafile.write(figCaptionTitle + "\n\n")
+    
     articleAuthor = page_row.find_element(By.TAG_NAME, 'h5')
     published_updated_time = page_row.find_elements(By.CLASS_NAME, "updated-time")
 
-    print()
-    print(page_title.text)
-    print(page_subTitle.text)
-    print("TITLE IMAGE")
-    print(image_srcs[0].get_attribute('src'))
-    print(figCaptionTitle.text)
-    print()
-    print("By " + articleAuthor.text)
-    print(published_updated_time[0].text)
-    print(published_updated_time[1].text)
+    visual_Datafile.write("By " + articleAuthor.text + "\n")
+    visual_Datafile.write(published_updated_time[0].text + "\n")
+    visual_Datafile.write(published_updated_time[1].text + "\n")
+
+        
+
     
     page_images_xpath = "/html/body/div[3]/main/div[2]/div/div/div[2]/div/div[6]"
     page_article = page_row.find_element(By.XPATH, page_images_xpath)
 
     page_article_imgs = page_article.find_elements(By.TAG_NAME, 'img')
-    page_article_figcaptions = page_article.find_elements(By.TAG_NAME, 'figcaption')
 
 
-    print("\nARTICLE IMAGES AND CAPTIONS")
+    page_article_figcaptions = []
+    
+    try:
+        page_article_figcaptions = page_article.find_elements(By.TAG_NAME, 'figcaption')
+    except NoSuchElementException:
+        page_article_figcaptions = []
+    
+
+    
+    visual_Datafile.write("\nARTICLE IMAGES AND CAPTIONS\n")
 
     
     for i in range(len(page_article_figcaptions)):
-        check_src = str(page_article_imgs[i].get_attribute('src'))
+        visual_Datafile.write(getImageSrc(page_article_imgs[i]) + "\n")        
 
+        visual_Datafile.write(page_article_figcaptions[i].text + "\n\n")
+    
+    
+    
+    
+    if(len(page_article_figcaptions) == 0):
+        wrapper_XPATH = '/html/body/div[3]/main/div[2]/div/div/div[2]/div/div[6]'
+        wrapper = page_row.find_element(By.XPATH, wrapper_XPATH)
+        visual_Datafile.write(wrapper.text + "\n")
+        
 
-        if(check_src == 'None'):
-            print(page_article_imgs[i].get_attribute('data-src'))
-        else:
-            print(check_src)        
+        for i in range(len(page_article_imgs)):
+            visual_Datafile.write(getImageSrc(page_article_imgs[i]) + "\n")       
+    
+    
+     
 
-        print(page_article_figcaptions[i].text)
         
 
     
