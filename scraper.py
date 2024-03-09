@@ -72,16 +72,12 @@ driver.get(site)
 #getting all responsive images in front page
 responsiveImages = driver.find_elements(By.XPATH,"//img[contains(@class,'img-responsive')]")
 
-#where all the images will go
-imgsrc = []
+
+
+datafile.write("ALL IMG SRCS\n\n")
 
 for img in responsiveImages:
-    imgsrc.append(str(img.get_attribute('src')))
-
-#for now we write all the img src to the file
-datafile.write("ALL IMG SRCS\n\n")
-datafile.writelines(imgsrc)
-datafile.write("\n")
+    datafile.write(getImageSrc(img) + "\n")
 
 
 #here i tried to download the images but the server doesn't let us get these images. 403: Forbiden. :(
@@ -106,7 +102,7 @@ for i in range(5):
 trending_topics = driver.find_elements(By.CSS_SELECTOR, ".trending-topics-list li")
 
 #writing it to file 
-datafile.write('TRENDING TOPICS\n')
+datafile.write('\n\nTRENDING TOPICS\n')
 
 trending_topics.pop(0)
 
