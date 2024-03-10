@@ -293,21 +293,6 @@ for page in visualStories_links:
         for i in range(len(page_article_imgs)):
             visual_Datafile.write(getImageSrc(page_article_imgs[i]) + "\n")       
     
-    
-     
-
-        
-
-    
-    
-    
-
-    
-
-
-
-
-
 
 
 driver.get(site)
@@ -567,12 +552,7 @@ for section in listOfUls:
 
 datafile.close()
 
-"""
-dataFileRead = open(dataFileLocation, 'r')
-print(dataFileRead.read())
-dataFileRead.close()
 
-"""
 
 # release the resources allocated by Selenium and shut down the browser
 driver.quit()
