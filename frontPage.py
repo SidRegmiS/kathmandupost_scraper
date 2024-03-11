@@ -318,46 +318,10 @@ moreNews_Titles = moreNews.find_elements(By.TAG_NAME,  'h3')
 moreNews_Authors = moreNews.find_elements(By.TAG_NAME,  'span')
 moreNews_subTitles = moreNews.find_elements(By.TAG_NAME,  'p')
 
-#within moreNews_Authors "SPONSORED" comes up twice in pos 1 and 2, so we need to remove it 
-moreNews_Authors.pop(1)
-moreNews_Authors.pop(1)
-
-
-
-#within the articles there is a "Latest News" and "Sponsored Section"
-#we should seperate them 
-
-LatestNews_Title = moreNews_Titles[0].text
-LatestNews_Author = moreNews_Authors[0].text
-LatestNews_subTitles = moreNews_subTitles[0].text
-
-datafile.writelines(["\n\nLATEST NEWS\n" + LatestNews_Title + " ", LatestNews_Author + " ", LatestNews_subTitles + "\n"])
-
-
-Sponsored_Title = moreNews_Titles[1].text
-Sponsored_Author = moreNews_Authors[1].text
-Sponsored_subTitles = moreNews_subTitles[1].text
-
-#print(LatestNews_Title, LatestNews_Author, LatestNews_subTitles)
-#print(Sponsored_Title, Sponsored_Author, Sponsored_subTitles)
-datafile.writelines(["\nSPONSORED\n" + Sponsored_Title + " ", Sponsored_Author + " ", Sponsored_subTitles + "\n"])
-
-
-
-
 
 #poping those two titles so that they aren't repeated
 
-moreNews_Titles.pop(0)
-moreNews_Titles.pop(0)
-
-moreNews_Authors.pop(0)
-moreNews_Authors.pop(0)
-
-moreNews_subTitles.pop(0)
-moreNews_subTitles.pop(0)
-
-datafile.write("\nMORE NEWS\n")
+datafile.write("\n\nLATEST UPDATES\n")
 
 
 for i in range(len(moreNews_Titles)):

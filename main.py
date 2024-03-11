@@ -20,11 +20,13 @@ main_page_dataFile_visualStories_exists = os.path.exists(os.path.join(os.getcwd(
 
 main_scaper_done = dir_exists and main_page_dataFile_exists and main_page_dataFile_visualStories_exists
 
-#checking if the main page files are already there 
+#checking if the main page files are already there
 if(not main_scaper_done):
     print("main scraper needs to be ran agian")
     os.system("python frontPage.py")
-    time.sleep(30)
+    time.sleep(5)
+
+
 
 national_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "national.txt"))
 
@@ -32,3 +34,10 @@ national_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directo
 if(not national_page_datafile_exists):
     print("national scaper needs to be run")
     os.system("python national.py")
+else:
+    print("national scaper needs to be run for debugging")
+    os.system("python national.py")
+
+
+
+
