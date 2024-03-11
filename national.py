@@ -21,6 +21,19 @@ def getImageSrc(image_element):
     else:
         return check_src
 
+#all national articles have the same structure
+#need to pass in the xpath as a string 
+#need to pass data file for writing
+def pageScrape(xpath, datafile, driver):
+    articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
+    
+    for i in range(len(articles)):
+        datafile.write(articles[i].text)
+
+
+
+
+
 options = Options()
 options.add_argument('--headless=new')
  
@@ -64,7 +77,33 @@ for i in range(len(mainNational_articles)):
 #this going to the other national pages and getting their stuff 
 otherNational_XPATH = '/html/body/div[3]/main/div/ul'
 otherNational = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'li')
+otherNational_Sites = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'a')
 
 
+otherNational_pages = []
+
+for page in otherNational_Sites:
+    otherNational_pages.append(page.get_attribute('href'))
+
+
+datafile.write("Other National Articles\n\n")
+
+"""
 for btn in otherNational:
     print(btn.text)
+"""
+
+temp_xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
+
+
+temp = 0
+for btn in otherNational:
+    otherNational_type = btn.text
+    datafile.write(otherNational_type + "\n")
+
+    #visit the site and write the needed information
+    driver.get(otherNational_pages[temp])
+    print("\n\n" + otherNational_pages[temp] + "\n\n")
+    pageScrape(temp_xpath,datafile, driver)
+    
+    temp = temp + 1
