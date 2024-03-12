@@ -47,7 +47,7 @@ driver = webdriver.Chrome(
 )
 
 # visit your target site
-site = 'https://kathmandupost.com/national'
+site = 'https://kathmandupost.com/art-culture'
 driver.get(site)
 
 
@@ -58,52 +58,34 @@ creating the file that stores the information
 date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime('%d')+ '-' +time.strftime('%H')
 directoryName = "./" + date_hour + "_dir/"
 
-dataFileLocation = directoryName + "national.txt"
+dataFileLocation = directoryName + "cul_life.txt"
 
-datafile = open(dataFileLocation, 'w', encoding='utf-8') #creates the file 
+datafile = open(dataFileLocation, 'w', encoding='utf-8') #creates the file
 
+xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
 
+datafile.write("Culture & Lifestyle" + "\n\n")
 
-mainNational_XPATH = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
+pageScrape(xpath, datafile, driver)
 
-mainNational_articles = driver.find_element(By.XPATH, mainNational_XPATH).find_elements(By.TAG_NAME, 'article')
-imgs_Of_Article = driver.find_element(By.XPATH, mainNational_XPATH).find_elements(By.CLASS_NAME, 'img-responsive')
+ul_xpath = '/html/body/div[3]/main/div/ul'
 
-datafile.write("National Articles\n\n")
-
-
-for i in range(len(mainNational_articles)):
-    datafile.write(mainNational_articles[i].text + "\nImage:")
-    datafile.write(getImageSrc(imgs_Of_Article[i]) + "\n\n")
+titles = driver.find_element(By.XPATH, ul_xpath).find_elements(By.TAG_NAME, 'li')
+sites = driver.find_element(By.XPATH, ul_xpath).find_elements(By.TAG_NAME, 'a')
 
 
-#this going to the other national pages and getting their stuff 
-otherNational_XPATH = '/html/body/div[3]/main/div/ul'
-otherNational = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'li')
-otherNational_Sites = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'a')
+siteTitles = []
+sites_links = []
 
-page_Titles = []
+for title in titles:
+    siteTitles.append(title.text)
 
-for title in otherNational:
-    page_Titles.append(title.text)
+#print(siteTitles)
 
-otherNational_pages = []
+for site in sites:
+    sites_links.append(site.get_attribute('href'))
 
-
-for page in otherNational_Sites:
-    otherNational_pages.append(page.get_attribute('href'))
-
-
-datafile.write("Other National Articles")
-
-
-temp_xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
-
-
-for i in range(len(otherNational)):
-    datafile.write("\n\n" + page_Titles[i] + "\n\n")
-
-    #visit the site and write the needed information
-    driver.get(otherNational_pages[i])
-    #print(otherNational_pages[i] + "\n\n")
-    pageScrape(temp_xpath,datafile, driver)
+for i in range(len(sites_links)):
+    datafile.write(siteTitles[i] + "\n\n")
+    driver.get(sites_links[i])
+    pageScrape(xpath, datafile, driver)

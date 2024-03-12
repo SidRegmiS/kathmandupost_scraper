@@ -34,9 +34,6 @@ def pageScrape(xpath, datafile, driver):
         datafile.write("\nImage: " + getImageSrc(imgs_Of_Article[i]) + "\n\n")
 
 
-
-
-
 options = Options()
 options.add_argument('--headless=new')
  
@@ -47,63 +44,52 @@ driver = webdriver.Chrome(
 )
 
 # visit your target site
-site = 'https://kathmandupost.com/national'
+site = 'https://kathmandupost.com/opinion'
 driver.get(site)
-
-
-"""
-creating the file that stores the information
-"""
 
 date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime('%d')+ '-' +time.strftime('%H')
 directoryName = "./" + date_hour + "_dir/"
-
-dataFileLocation = directoryName + "national.txt"
+dataFileLocation = directoryName + "opinion.txt"
 
 datafile = open(dataFileLocation, 'w', encoding='utf-8') #creates the file 
 
+ul_xpath = '/html/body/div[3]/main/div/ul'
 
 
-mainNational_XPATH = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
+opinion_title = driver.find_element(By.XPATH, ul_xpath).find_elements(By.TAG_NAME, 'li')
+opinion_sites = driver.find_element(By.XPATH, ul_xpath).find_elements(By.TAG_NAME, 'a')
 
-mainNational_articles = driver.find_element(By.XPATH, mainNational_XPATH).find_elements(By.TAG_NAME, 'article')
-imgs_Of_Article = driver.find_element(By.XPATH, mainNational_XPATH).find_elements(By.CLASS_NAME, 'img-responsive')
+datafile.write("Opinion\n\n")
 
-datafile.write("National Articles\n\n")
+siteTitles = []
+sites_links = []
 
+for title in opinion_title:
+    siteTitles.append(title.text)
 
-for i in range(len(mainNational_articles)):
-    datafile.write(mainNational_articles[i].text + "\nImage:")
-    datafile.write(getImageSrc(imgs_Of_Article[i]) + "\n\n")
+#print(siteTitles)
 
+for site in opinion_sites:
+    sites_links.append(site.get_attribute('href'))
 
-#this going to the other national pages and getting their stuff 
-otherNational_XPATH = '/html/body/div[3]/main/div/ul'
-otherNational = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'li')
-otherNational_Sites = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'a')
+#print(sites_links)
+artilces_xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
+pageScrape(artilces_xpath, datafile, driver)
 
-page_Titles = []
+for i in range(len(sites_links)):
+    datafile.write(siteTitles[i] + "\n\n")
+    driver.get(sites_links[i])
+    pageScrape(artilces_xpath, datafile, driver)
 
-for title in otherNational:
-    page_Titles.append(title.text)
+datafile.close()
 
-otherNational_pages = []
+money_site = 'https://kathmandupost.com/money'
 
+dataFileLocation2 = directoryName + "money.txt"
 
-for page in otherNational_Sites:
-    otherNational_pages.append(page.get_attribute('href'))
+datafile = open(dataFileLocation2, 'w', encoding='utf-8')
 
+datafile.write('Money\n\n')
 
-datafile.write("Other National Articles")
-
-
-temp_xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
-
-
-for i in range(len(otherNational)):
-    datafile.write("\n\n" + page_Titles[i] + "\n\n")
-
-    #visit the site and write the needed information
-    driver.get(otherNational_pages[i])
-    #print(otherNational_pages[i] + "\n\n")
-    pageScrape(temp_xpath,datafile, driver)
+driver.get(money_site)
+pageScrape(artilces_xpath, datafile, driver)

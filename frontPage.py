@@ -51,7 +51,7 @@ createDataFolder(directory)
 
 dataFileLocation = directory + fileName + ".txt"
 
-datafile = open(dataFileLocation, 'w') #creates the file 
+datafile = open(dataFileLocation, 'w', encoding='utf-8') #creates the file 
 
 options = Options()
 options.add_argument('--headless=new')
