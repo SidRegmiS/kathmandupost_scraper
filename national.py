@@ -105,5 +105,5 @@ for i in range(len(otherNational)):
 
     #visit the site and write the needed information
     driver.get(otherNational_pages[i])
-    print(otherNational_pages[i] + "\n\n")
+    #print(otherNational_pages[i] + "\n\n")
     pageScrape(temp_xpath,datafile, driver)
