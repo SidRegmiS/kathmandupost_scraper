@@ -26,9 +26,12 @@ def getImageSrc(image_element):
 #need to pass data file for writing
 def pageScrape(xpath, datafile, driver):
     articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
+    imgs_Of_Article = driver.find_element(By.XPATH, xpath).find_elements(By.CLASS_NAME, 'img-responsive')
+
     
     for i in range(len(articles)):
         datafile.write(articles[i].text)
+        datafile.write("\nImage: " + getImageSrc(imgs_Of_Article[i]) + "\n\n")
 
 
 
@@ -79,31 +82,28 @@ otherNational_XPATH = '/html/body/div[3]/main/div/ul'
 otherNational = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'li')
 otherNational_Sites = driver.find_element(By.XPATH, otherNational_XPATH).find_elements(By.TAG_NAME, 'a')
 
+page_Titles = []
+
+for title in otherNational:
+    page_Titles.append(title.text)
 
 otherNational_pages = []
+
 
 for page in otherNational_Sites:
     otherNational_pages.append(page.get_attribute('href'))
 
 
-datafile.write("Other National Articles\n\n")
+datafile.write("Other National Articles")
 
-"""
-for btn in otherNational:
-    print(btn.text)
-"""
 
 temp_xpath = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
 
 
-temp = 0
-for btn in otherNational:
-    otherNational_type = btn.text
-    datafile.write(otherNational_type + "\n")
+for i in range(len(otherNational)):
+    datafile.write("\n\n" + page_Titles[i] + "\n\n")
 
     #visit the site and write the needed information
-    driver.get(otherNational_pages[temp])
-    print("\n\n" + otherNational_pages[temp] + "\n\n")
+    driver.get(otherNational_pages[i])
+    print(otherNational_pages[i] + "\n\n")
     pageScrape(temp_xpath,datafile, driver)
-    
-    temp = temp + 1
