@@ -75,6 +75,12 @@ if(not culture_n_arts_page_datafile_exists):
     os.system("python culture.py")
 
 
+health_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "health.txt"))
+
+if(not culture_n_arts_page_datafile_exists):
+    print("health page needs to be scraped")
+    os.system("python health.py")
+
 
 
 
