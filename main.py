@@ -77,10 +77,20 @@ if(not culture_n_arts_page_datafile_exists):
 
 health_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "health.txt"))
 
-if(not culture_n_arts_page_datafile_exists):
+if(not health_page_datafile_exists):
     print("health page needs to be scraped")
     os.system("python health.py")
 
 
+food_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "food.txt"))
+
+if(not food_page_datafile_exists):
+    print("food page needs to be scraped")
+    os.system("python food.py")
+
+other_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "science-technology.txt"))
 
 
+if (not other_page_datafile_exists):
+    print("other.py debugging")
+    os.system("python other.py")
