@@ -26,8 +26,7 @@ if(not main_scaper_done):
     os.system("python frontPage.py")
    
 
-
-
+"""
 national_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "national.txt"))
 
 
@@ -93,4 +92,8 @@ other_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryN
 
 if (not other_page_datafile_exists):
     print("other.py debugging")
-    os.system("python other.py")
+
+"""
+
+
+os.system("python other.py")
