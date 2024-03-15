@@ -99,7 +99,9 @@ sites = [
     'https://kathmandupost.com/investigations', 
     'https://kathmandupost.com/climate-environment',  
     'https://kathmandupost.com/world',
-    'https://kathmandupost.com/science-technology'
+    'https://kathmandupost.com/science-technology',
+    'https://kathmandupost.com/interviews',
+    'https://kathmandupost.com/visual-stories'
 ]
 
 fileNames = [
@@ -117,7 +119,10 @@ fileNames = [
     'investigation.txt',
     'climate-environment.txt',
     'world.txt',
-    'science-technology.txt'
+    'science-technology.txt',
+    'interviews.txt',
+    'visual-stories.txt'
+
 ]
 #'travel.txt' -> TRAVEL
 names = [sub[: -4].upper() for sub in fileNames]
