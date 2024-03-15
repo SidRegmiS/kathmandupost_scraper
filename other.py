@@ -1,6 +1,4 @@
-#special files to get the other stuff on the website thats not as important
-
-
+#this gets everthing thats is not on the main page. 
 #importing dateTime for file creating and storing informations into a file
 import time
 import datetime 
@@ -28,15 +26,6 @@ def getImageSrc(image_element):
 #need to pass in the xpath as a string 
 #need to pass data file for writing
 def pageScrape(xpath, datafile, driver):
-    articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
-    imgs_Of_Article = driver.find_element(By.XPATH, xpath).find_elements(By.CLASS_NAME, 'img-responsive')
-
-    
-    for i in range(len(articles)):
-        datafile.write(articles[i].text)
-        datafile.write("\nImage: " + getImageSrc(imgs_Of_Article[i]) + "\n\n")
-
-def pageScrape2(xpath, datafile, driver):
     title = driver.find_element(By.XPATH, xpath).find_element(By.TAG_NAME, 'h4')
     articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
     imgs_Of_Article = driver.find_element(By.XPATH, xpath).find_elements(By.CLASS_NAME, 'img-responsive')
@@ -44,7 +33,7 @@ def pageScrape2(xpath, datafile, driver):
     datafile.write(title.text + "\n")
     for i in range(len(articles)):
         datafile.write(articles[i].text)
-        datafile.write("\nImage: " + getImageSrc(imgs_Of_Article[i]) + "\n\n")
+        datafile.write("\n" + getImageSrc(imgs_Of_Article[i]) + "\n\n")
 
 
 def check_exists_by_xpath(xpath, driver):
@@ -145,9 +134,9 @@ for i in range(len(sites)):
     driver.get(sites[i])
     print(name)
     if(name == 'CORRECTIONS'):
-        pageScrape2(xpath2, datafile, driver)
+        pageScrape(xpath2, datafile, driver)
     else:
-        pageScrape2(xpath, datafile, driver)
+        pageScrape(xpath, datafile, driver)
 
         #check if the ul_xpath exists
         if check_exists_by_xpath(ul_xpath, driver):
@@ -156,7 +145,7 @@ for i in range(len(sites)):
             
             for link in links_in_ul:
                 driver.get(link)
-                pageScrape2(xpath, datafile, driver)
+                pageScrape(xpath, datafile, driver)
 
         
 
