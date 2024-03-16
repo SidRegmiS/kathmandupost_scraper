@@ -45,13 +45,22 @@ def get_h3_links(xpath, driver):
     links = []
     h3Tags = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'h3')
 
-    
-
     for i in range(len(h3Tags)):
         links.append(h3Tags[i].find_element(By.TAG_NAME, 'a').get_attribute('href'))
 
-    
     return links
+
+def get_first_aTag_updates(xpath, driver):
+    articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
+
+    link_to_article = []
+    for article in articles:
+        link_to_article.append(article.find_element(By.TAG_NAME, 'a').get_attribute('href'))
+        #link_to_article.append(article.text)
+
+    return link_to_article
+
+
 
 def check_exists_by_xpath(xpath, driver):
     try:
@@ -65,11 +74,19 @@ def check_exists_by_tagName(driver, name):
         driver.find_element(By.TAG_NAME, name)
     except NoSuchElementException:
         return False
-    return True 
+    return True
+
+
 
 def article_scrape(driver, datafile):
     article_path = '/html/body/div[3]/main/div/div[2]/div[1]'
     author_path = '/html/body/div[3]/main/div/div[2]/div[1]/div/div/h5'
+
+    '/html/body/div[3]/main/div[2]/div/div'
+
+    if check_exists_by_xpath(article_path, driver) == False:
+        visual_article(driver, datafile)
+        return
 
     article_driver = driver.find_element(By.XPATH, article_path)
     author_driver = 0    
@@ -100,8 +117,45 @@ def article_scrape(driver, datafile):
         author = author_driver.text
 
     datafile.write("\n" +section + "\n" + title+ "\n" + title_sub+ "\n" + getImageSrc(img_element)+ "\n" + fig_caption + "\n" + author + "\n")
+
+def visual_article(driver, datafile):
+    print("this was a visual article")
     
 
+    article_path = '/html/body/div[3]/main/div[2]/div/div'
+    author_path = '/html/body/div[3]/main/div[2]/div/div/div[2]/div/h5'
+
+    article_driver = driver.find_element(By.XPATH, article_path)
+    author_driver = 0    
+
+    if check_exists_by_xpath(author_path, driver):
+        author_driver = driver.find_element(By.XPATH, author_path)
+
+    
+    section = ''
+    title = ''
+    title_sub = ''
+    img_element = article_driver.find_element(By.CLASS_NAME, 'img-responsive')
+    fig_caption = ''
+    author = 'Anonymous'
+
+
+    if check_exists_by_tagName(article_driver, 'h4'):
+        section =  article_driver.find_element(By.TAG_NAME, 'h4').text
+
+    if check_exists_by_tagName(article_driver, 'h1'):
+        title =  article_driver.find_element(By.TAG_NAME, 'h1').text
+
+    if check_exists_by_tagName(article_driver, 'span'):
+        title_sub =  article_driver.find_element(By.TAG_NAME, 'span').text
+
+    if check_exists_by_tagName(article_driver, 'figcaption'):
+        fig_caption =  article_driver.find_element(By.TAG_NAME, 'figcaption').text
+
+    if author_driver != 0:
+        author = author_driver.text
+
+    datafile.write("\n" +section + "\n" + title+ "\n" + title_sub+ "\n" + getImageSrc(img_element)+ "\n" + fig_caption + "\n" + author + "\n")
 
 
 
@@ -140,7 +194,7 @@ trending_links = get_all_links(trending_topics_xpath, driver)
 
 datafile.write("***TRENDING TOPICS***\n")
 
-"""
+
 for link in trending_links:
     driver.get(link)
     article_scrape(driver, datafile)
@@ -163,11 +217,17 @@ for link in article_links:
     
 driver.get(site)
 
-"""
 
 
+datafile.write("\n***LATEST UPDATES***\n")
+updates_xpath = '/html/body/div[4]/main/div/div[6]/div/div[3]'
+
+updates_links = get_first_aTag_updates(updates_xpath, driver)
 
 
+for link in updates_links:
+    driver.get(link)
+    article_scrape(driver, datafile)
 
 datafile.close()
 # release the resources allocated by Selenium and shut down the browser
