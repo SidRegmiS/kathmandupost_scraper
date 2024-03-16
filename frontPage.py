@@ -69,18 +69,20 @@ def check_exists_by_tagName(driver, name):
 
 def article_scrape(driver, datafile):
     article_path = '/html/body/div[3]/main/div/div[2]/div[1]'
-    content_path = '/html/body/div[3]/main/div/div[2]/div[1]/div/div'
+    author_path = '/html/body/div[3]/main/div/div[2]/div[1]/div/div/h5'
 
     article_driver = driver.find_element(By.XPATH, article_path)
-    content_driver = driver.find_element(By.XPATH, content_path)
+    author_driver = 0    
 
+    if check_exists_by_xpath(author_path, driver):
+        author_driver = driver.find_element(By.XPATH, author_path)
 
     section = ''
     title = ''
     title_sub = ''
     img_element = article_driver.find_element(By.CLASS_NAME, 'img-responsive')
     fig_caption = ''
-    author = ''
+    author = 'Anonymous'
 
     if check_exists_by_tagName(article_driver, 'h4'):
         section =  article_driver.find_element(By.TAG_NAME, 'h4').text
@@ -94,9 +96,8 @@ def article_scrape(driver, datafile):
     if check_exists_by_tagName(article_driver, 'figcaption'):
         fig_caption =  article_driver.find_element(By.TAG_NAME, 'figcaption').text
 
-    if check_exists_by_tagName(content_driver, 'h5'):
-        author = content_driver.find_element(By.TAG_NAME, 'h5').text
-
+    if author_driver != 0:
+        author = author_driver.text
 
     datafile.write("\n" +section + "\n" + title+ "\n" + title_sub+ "\n" + getImageSrc(img_element)+ "\n" + fig_caption + "\n" + author + "\n")
     
@@ -139,12 +140,14 @@ trending_links = get_all_links(trending_topics_xpath, driver)
 
 datafile.write("***TRENDING TOPICS***\n")
 
-
+"""
 for link in trending_links:
     driver.get(link)
     article_scrape(driver, datafile)
 
 driver.get(site)
+
+
 
 datafile.write("\n***MAIN ARTICLES***\n")
 
@@ -157,10 +160,13 @@ for link in article_links:
     driver.get(link)
     article_scrape(driver, datafile)
     
-
-
-
+    
 driver.get(site)
+
+"""
+
+
+
 
 
 datafile.close()
