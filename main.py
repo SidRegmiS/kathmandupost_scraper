@@ -19,7 +19,7 @@ main_page_dataFile_exists = os.path.exists(os.path.join(os.getcwd(), directoryNa
 
 
 main_scaper_done = dir_exists and main_page_dataFile_exists
-"""
+
 
 #checking if the main page files are already there
 if(not main_scaper_done):
@@ -32,9 +32,5 @@ if (not other_page_datafile_exists):
     print("running other.py")
     os.system("python other.py")
 
-"""
 
-
-print("debugging frontPage.py")
-os.system("python frontPage.py")
 

@@ -64,6 +64,8 @@ def createFile(directoryName, fileName):
 
 options = Options()
 options.add_argument('--headless=new')
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--allow-running-insecure-content')
  
 # initialize an instance of the chrome driver (browser)
 driver = webdriver.Chrome(

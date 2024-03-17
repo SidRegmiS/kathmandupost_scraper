@@ -50,6 +50,18 @@ def get_h3_links(xpath, driver):
 
     return links
 
+def get_h5_links(xpath, driver):
+    links = []
+
+
+    if check_exists_by_tagName(driver, 'h5'):
+        h5Tags = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'h5')
+
+    for i in range(len(h5Tags)):
+        links.append(h5Tags[i].find_element(By.TAG_NAME, 'a').get_attribute('href'))
+
+    return links
+
 def get_first_aTag_updates(xpath, driver):
     articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
 
@@ -119,9 +131,6 @@ def article_scrape(driver, datafile):
     datafile.write("\n" +section + "\n" + title+ "\n" + title_sub+ "\n" + getImageSrc(img_element)+ "\n" + fig_caption + "\n" + author + "\n")
 
 def visual_article(driver, datafile):
-    print("this was a visual article")
-    
-
     article_path = '/html/body/div[3]/main/div[2]/div/div'
     author_path = '/html/body/div[3]/main/div[2]/div/div/div[2]/div/h5'
 
@@ -175,7 +184,8 @@ datafile = open(dataFileLocation, 'w', encoding='utf-8') #creates the file
 
 options = Options()
 options.add_argument('--headless=new')
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
+options.add_argument('--ignore-certificate-errors')
+options.add_argument('--allow-running-insecure-content')
  
 # initialize an instance of the chrome driver (browser)
 driver = webdriver.Chrome(
@@ -193,9 +203,10 @@ trending_topics_xpath = '/html/body/div[4]/main/div/div[1]/div/div'
 trending_links = get_all_links(trending_topics_xpath, driver)
 
 datafile.write("***TRENDING TOPICS***\n")
-
+print('***TRENDING TOPICS***')
 
 for link in trending_links:
+    print(link)
     driver.get(link)
     article_scrape(driver, datafile)
 
@@ -204,30 +215,114 @@ driver.get(site)
 
 
 datafile.write("\n***MAIN ARTICLES***\n")
-
+print('***MAIN ARTICLES***')
 
 main_articles_xpath = '/html/body/div[4]/main/div/div[2]'
 
 article_links = get_h3_links(main_articles_xpath, driver)
 
 for link in article_links:
+    print(link)
     driver.get(link)
     article_scrape(driver, datafile)
     
-    
 driver.get(site)
-
-
-
 datafile.write("\n***LATEST UPDATES***\n")
+print('***LATEST UPDATES***')
 updates_xpath = '/html/body/div[4]/main/div/div[6]/div/div[3]'
 
 updates_links = get_first_aTag_updates(updates_xpath, driver)
 
 
 for link in updates_links:
+    print(link)
     driver.get(link)
     article_scrape(driver, datafile)
+
+driver.get(site)
+
+
+
+most_read_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[1]/div'
+
+datafile.write("\n***MOST READ***\n")
+print('***MOST READ***')
+
+most_read_links = get_h5_links(most_read_xpath, driver)
+
+for link in most_read_links:
+    print(link)
+    driver.get(link)
+    article_scrape(driver, datafile)
+
+driver.get(site)
+
+editors_picks_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[3]/div'
+
+editors_picks_links = get_h5_links(editors_picks_xpath, driver)
+
+datafile.write("\n***Editor's Picks***\n")
+print("***Editor's Picks***")
+
+for link in editors_picks_links:
+    print(link)
+    driver.get(link)
+    article_scrape(driver, datafile)
+
+driver.get(site)
+
+
+
+culture_arts_xpath = '/html/body/div[4]/main/div/div[9]/div[3]'
+
+culture_arts_links = list(set(get_all_links(culture_arts_xpath, driver)))
+
+datafile.write("\n***CULTURE & ARTS***\n")
+print("***CULTURE & ARTS***")
+
+for link in culture_arts_links:
+    print(link)
+    driver.get(link)
+    article_scrape(driver, datafile)
+
+driver.get(site)
+
+
+all_news_xpath = '/html/body/div[4]/main/div/div[11]/div/div[1]/div/article/ul'
+
+news_class_list = driver.find_elements(By.CLASS_NAME, 'block-newsCat--list')
+
+ulElements = []
+
+links = []
+
+for newsList in news_class_list:
+    ulElements.append(newsList.find_element(By.TAG_NAME, 'ul'))
+
+for ulElement in ulElements:
+   aTags_in_ul = ulElement.find_elements(By.TAG_NAME, 'a')
+   
+
+   for link in aTags_in_ul:
+        links.append(link.get_attribute('href'))
+
+
+
+datafile.write("\n***NEWS***\n")
+print("***NEWS***")
+
+
+for link in links:
+    print(link)
+    driver.get(link)
+    article_scrape(driver, datafile)
+
+driver.get(site)
+
+
+
+
+
 
 datafile.close()
 # release the resources allocated by Selenium and shut down the browser
