@@ -202,7 +202,7 @@ trending_topics_xpath = '/html/body/div[4]/main/div/div[1]/div/div'
 #get all links in trending topics
 trending_links = get_all_links(trending_topics_xpath, driver)
 
-datafile.write("***TRENDING TOPICS***\n")
+datafile.write("***TRENDING TOPICS***")
 print('***TRENDING TOPICS***')
 
 for link in trending_links:
@@ -214,7 +214,7 @@ driver.get(site)
 
 
 
-datafile.write("\n***MAIN ARTICLES***\n")
+datafile.write("***MAIN ARTICLES***")
 print('***MAIN ARTICLES***')
 
 main_articles_xpath = '/html/body/div[4]/main/div/div[2]'
@@ -225,9 +225,10 @@ for link in article_links:
     print(link)
     driver.get(link)
     article_scrape(driver, datafile)
-    
+
+
 driver.get(site)
-datafile.write("\n***LATEST UPDATES***\n")
+datafile.write("***LATEST UPDATES***")
 print('***LATEST UPDATES***')
 updates_xpath = '/html/body/div[4]/main/div/div[6]/div/div[3]'
 
@@ -245,7 +246,7 @@ driver.get(site)
 
 most_read_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[1]/div'
 
-datafile.write("\n***MOST READ***\n")
+datafile.write("***MOST READ***")
 print('***MOST READ***')
 
 most_read_links = get_h5_links(most_read_xpath, driver)
@@ -261,7 +262,7 @@ editors_picks_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[3]/div'
 
 editors_picks_links = get_h5_links(editors_picks_xpath, driver)
 
-datafile.write("\n***Editor's Picks***\n")
+datafile.write("***Editor's Picks***")
 print("***Editor's Picks***")
 
 for link in editors_picks_links:
@@ -277,7 +278,7 @@ culture_arts_xpath = '/html/body/div[4]/main/div/div[9]/div[3]'
 
 culture_arts_links = list(set(get_all_links(culture_arts_xpath, driver)))
 
-datafile.write("\n***CULTURE & ARTS***\n")
+datafile.write("***CULTURE & ARTS***")
 print("***CULTURE & ARTS***")
 
 for link in culture_arts_links:
@@ -308,7 +309,7 @@ for ulElement in ulElements:
 
 
 
-datafile.write("\n***NEWS***\n")
+datafile.write("***NEWS***")
 print("***NEWS***")
 
 

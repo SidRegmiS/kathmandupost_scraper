@@ -12,7 +12,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-
 #the website sometimes has data images so sometimes you can't just check the src
 #retruns the src 
 def getImageSrc(image_element):
@@ -113,7 +112,6 @@ fileNames = [
     'science-technology.txt',
     'interviews.txt',
     'visual-stories.txt'
-
 ]
 #'travel.txt' -> TRAVEL
 names = [sub[: -4].upper() for sub in fileNames]
