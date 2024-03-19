@@ -103,8 +103,9 @@ author = ""
 date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime('%d')+ '-' +time.strftime('%H')
 directoryName = "./" + date_hour + "_dir"
 
-file_location = directoryName + chr(92) + "main.txt"
-datafile = open(file_location, 'r', encoding='utf-8')
+#file_location = directoryName + chr(92) + "main.txt"
+directoryName = './2024-03-19-18_dir'
+#datafile = open(file_location, 'r', encoding='utf-8')
 article_count = 0
 for file in fileNames:
     file_location = directoryName + chr(92) + file
@@ -113,29 +114,28 @@ for file in fileNames:
     lines = datafile.readlines()
     count = 0
 
-    section = lines.pop(0).strip()
+   
 
     for line in lines:
         line_stripped = line.strip()
 
-        if count == 0:
-            title = line_stripped
-        elif count == 1:
-            author = line_stripped
-        elif count == 2:
-            sub_title = line_stripped
-        elif count == 3:
-            title_img_src = line_stripped
-        elif count == 4:
-            print(article_count, title, author, sub_title)
+
+        if line[0] == '*':
+            print(line_stripped)
+            #reset count 
+            count = 0
+            continue
+
         
-        count = count + 1
-        if (count > 4):
+        
+
+        if (count == 4):
             article_count = article_count + 1
             count = 0
         
+        count = count + 1
         
-        if article_count == 10:
+        if article_count == 30:
             break
         
 

@@ -29,7 +29,7 @@ def pageScrape(xpath, datafile, driver):
     articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
     imgs_Of_Article = driver.find_element(By.XPATH, xpath).find_elements(By.CLASS_NAME, 'img-responsive')
 
-    datafile.write(title.text + "\n")
+    datafile.write("*"+ title.text + "\n")
     for i in range(len(articles)):
         datafile.write(articles[i].text)
         datafile.write("\n" + getImageSrc(imgs_Of_Article[i]) + "\n\n")
