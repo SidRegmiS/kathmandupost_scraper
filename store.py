@@ -35,11 +35,11 @@ cursor.execute('''
     CREATE TABLE main_articles (
         page_section nvarchar(50),
         section nvarchar(100),
-        title nvarchar(100),
+        title nvarchar(500),
         subtitle nvarchar(500),
         title_img_src nvarchar(2083),
         title_img_caption nvarchar(500),
-        author nvarchar(100)   
+        author nvarchar(500)   
     )
     ''')
 
@@ -49,11 +49,10 @@ cursor.commit()
 cursor.execute(''' 
     CREATE TABLE articles (
         section nvarchar(100),
-        title nvarchar(100),
+        title nvarchar(500),
         subtitle nvarchar(500),
         title_img_src nvarchar(2083),
-        title_img_caption nvarchar(500),
-        author nvarchar(100)   
+        author nvarchar(500)   
     )
     ''')
 
@@ -70,7 +69,6 @@ fileNames = [
     'art-culture.txt',
     'health.txt',
     'food.txt',
-    'corrections.txt',
     'travel.txt',
     'investigation.txt',
     'climate-environment.txt',
@@ -104,49 +102,58 @@ date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime
 directoryName = "./" + date_hour + "_dir"
 
 #file_location = directoryName + chr(92) + "main.txt"
-directoryName = './2024-03-19-18_dir'
 #datafile = open(file_location, 'r', encoding='utf-8')
 article_count = 0
 for file in fileNames:
     file_location = directoryName + chr(92) + file
     datafile = open(file_location, 'r', encoding='utf-8')
-    print(file_location)
     lines = datafile.readlines()
     count = 0
-
-   
 
     for line in lines:
         line_stripped = line.strip()
 
+        skip = 0
 
         if line[0] == '*':
-            print(line_stripped)
+            #print(line_stripped)
+            section = line_stripped[1:]
             #reset count 
             count = 0
-            continue
+            skip = 1
 
-        
-        
+        if skip != 1:
+            if count == 0:
+                title = line_stripped
+            elif count == 1:
+                author = line_stripped
+            elif count == 2:
+                sub_title = line_stripped
+            elif count == 3:
+                title_img_src = line_stripped
+            elif (count == 4):
+                cursor.execute(''' 
+                    INSERT INTO articles values 
+                    (
+                        ?,
+                        ?,
+                        ?,
+                        ?,
+                        ?     
+                    )
+                    ''', section, title, sub_title, title_img_src, author)
+                cursor.commit()
+                #print(section, title, author, sub_title, title_img_src)
+                
 
-        if (count == 4):
-            article_count = article_count + 1
-            count = 0
-        
-        count = count + 1
-        
-        if article_count == 30:
-            break
-        
+            count = count + 1
 
+            if count > 4:
+                count = 0
+                
 
-    break
-
-
-
-
-sys.exit()
-
+file_location = directoryName + chr(92) + "main.txt"
+datafile = open(file_location, 'r', encoding='utf-8')
 lines = datafile.readlines()
 count = 0
 article_count = 0
@@ -196,26 +203,3 @@ for line in lines:
         count = 0
     
 
-print(article_count)
-
-
-    
-    
-
-
-"""
-cursor.execute(''' 
-    INSERT INTO articles values 
-    (
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?      
-    )
-    ''', page_section, section, title, sub_title, title_img_src, title_img_caption, author)
-
-cursor.commit()
-"""

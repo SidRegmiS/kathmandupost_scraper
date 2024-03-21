@@ -25,14 +25,35 @@ def getImageSrc(image_element):
 #need to pass in the xpath as a string 
 #need to pass data file for writing
 def pageScrape(xpath, datafile, driver):
-    title = driver.find_element(By.XPATH, xpath).find_element(By.TAG_NAME, 'h4')
-    articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
-    imgs_Of_Article = driver.find_element(By.XPATH, xpath).find_elements(By.CLASS_NAME, 'img-responsive')
+    pageDirver = driver.find_element(By.XPATH, xpath)
+    title = pageDirver.find_element(By.TAG_NAME, 'h4')
+    articles = pageDirver.find_elements(By.TAG_NAME, 'article')
+    imgs_Of_Article = pageDirver.find_elements(By.CLASS_NAME, 'img-responsive')
 
     datafile.write("*"+ title.text + "\n")
+
     for i in range(len(articles)):
-        datafile.write(articles[i].text)
-        datafile.write("\n" + getImageSrc(imgs_Of_Article[i]) + "\n\n")
+        article = articles[i]
+        article_title = article.find_element(By.TAG_NAME, 'h3')
+
+        article_author = ''
+
+        if check_exists_by_class('article-author',article):
+            article_author =  article.find_element(By.CLASS_NAME,'article-author').text
+        
+        sub_title = article.find_element(By.TAG_NAME,'p')
+        datafile.write(article_title.text + "\n")
+        datafile.write(article_author + "\n")
+        datafile.write(sub_title.text + "\n")
+        datafile.write(getImageSrc(imgs_Of_Article[i]) + "\n\n")
+
+
+def check_exists_by_class(class_name, driver):
+    try:
+        driver.find_element(By.CLASS_NAME, class_name)
+    except NoSuchElementException:
+        return False
+    return True     
 
 
 def check_exists_by_xpath(xpath, driver):
@@ -75,16 +96,15 @@ driver = webdriver.Chrome(
 # visit your target site
 
 sites = [
+    'https://kathmandupost.com/opinion',
     'https://kathmandupost.com/national',
     'https://kathmandupost.com/politics',
     'https://kathmandupost.com/valley',
-    'https://kathmandupost.com/opinion',
     'https://kathmandupost.com/money',
     'https://kathmandupost.com/sports',
     'https://kathmandupost.com/art-culture',
     'https://kathmandupost.com/health',
     'https://kathmandupost.com/food',
-    'https://kathmandupost.com/corrections',
     'https://kathmandupost.com/travel', 
     'https://kathmandupost.com/investigations', 
     'https://kathmandupost.com/climate-environment',  
@@ -95,16 +115,15 @@ sites = [
 ]
 
 fileNames = [
+    'opinion.txt',
     'national.txt',
     'politcs.txt',
     'valley.txt',
-    'opinion.txt',
     'money.txt',
     'sports.txt',
     'art-culture.txt',
     'health.txt',
     'food.txt',
-    'corrections.txt',
     'travel.txt',
     'investigation.txt',
     'climate-environment.txt',
@@ -133,19 +152,17 @@ for i in range(len(sites)):
     datafile = createFile(directoryName, fileNames[i])
     driver.get(sites[i])
     print(name)
-    if(name == 'CORRECTIONS'):
-        pageScrape(xpath2, datafile, driver)
-    else:
-        pageScrape(xpath, datafile, driver)
+    pageScrape(xpath, datafile, driver)
 
-        #check if the ul_xpath exists
-        if check_exists_by_xpath(ul_xpath, driver):
-            #get all links in ul
-            links_in_ul = get_all_links(ul_xpath, driver)
-            
-            for link in links_in_ul:
-                driver.get(link)
-                pageScrape(xpath, datafile, driver)
+    #check if the ul_xpath exists
+    if check_exists_by_xpath(ul_xpath, driver):
+        #get all links in ul
+        links_in_ul = get_all_links(ul_xpath, driver)
+        
+        for link in links_in_ul:
+            driver.get(link)
+            pageScrape(xpath, datafile, driver)
+    
 
         
 
