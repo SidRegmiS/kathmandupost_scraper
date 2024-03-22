@@ -3,12 +3,16 @@
 import pyodbc
 import time
 import sys
-import os 
+import os
 
-server = 'DESKTOP-PLGKKL1'
-database = 'KTP'
-username = 'nish'
-password = '1'
+from dotenv import load_dotenv
+
+load_dotenv()
+
+server = os.environ['server']
+database = os.environ['database']
+username = os.environ['username']
+password = os.environ['password']
 
 # Establishing a connection to the SQL Server
 #connecting to database
