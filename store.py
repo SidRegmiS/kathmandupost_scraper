@@ -9,10 +9,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-server = os.environ['server']
-database = os.environ['database']
-username = os.environ['username']
-password = os.environ['password']
+server = os.getenv('server')
+database = os.getenv('database')
+username =  os.getenv('username1')
+password =  os.getenv('password')
+
 
 # Establishing a connection to the SQL Server
 #connecting to database
@@ -31,36 +32,38 @@ cnxn.setencoding(encoding='utf8')
 
 cursor = cnxn.cursor()
 
-cursor.execute("""DROP TABLE main_articles""")
-cursor.execute("""DROP TABLE articles""")
+new_tables_check = input("Is this your time saving to ssms? (yes/no)")
 
+if (new_tables_check == 'yes'):
+    try:
+        cursor.execute(''' 
+            CREATE TABLE main_articles (
+                page_section nvarchar(50),
+                section nvarchar(100),
+                title nvarchar(500),
+                subtitle nvarchar(500),
+                title_img_src nvarchar(2083),
+                title_img_caption nvarchar(500),
+                author nvarchar(500)   
+            )
+            ''')
 
-cursor.execute(''' 
-    CREATE TABLE main_articles (
-        page_section nvarchar(50),
-        section nvarchar(100),
-        title nvarchar(500),
-        subtitle nvarchar(500),
-        title_img_src nvarchar(2083),
-        title_img_caption nvarchar(500),
-        author nvarchar(500)   
-    )
-    ''')
+        cursor.commit()
 
-cursor.commit()
+        cursor.execute(''' 
+            CREATE TABLE articles (
+                section nvarchar(100),
+                title nvarchar(500),
+                subtitle nvarchar(500),
+                title_img_src nvarchar(2083),
+                author nvarchar(500)   
+            )
+            ''')
 
-
-cursor.execute(''' 
-    CREATE TABLE articles (
-        section nvarchar(100),
-        title nvarchar(500),
-        subtitle nvarchar(500),
-        title_img_src nvarchar(2083),
-        author nvarchar(500)   
-    )
-    ''')
-
-cursor.commit()
+        cursor.commit()
+    except:
+        print("ERROR: Failed creating tables. The tables may already exist.")
+        sys.exit() 
 
 
 fileNames = [

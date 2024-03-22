@@ -33,4 +33,4 @@ if (not other_page_datafile_exists):
     os.system("python other.py")
 
 
-
+os.system("python store.py")
