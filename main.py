@@ -33,4 +33,7 @@ if (not other_page_datafile_exists):
     os.system("python other.py")
 
 
-os.system("python store.py")
+store_yes = input("do you want to store data? (yes/no)")
+
+if store_yes == 'yes':
+    os.system("python store.py")
