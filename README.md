@@ -1,6 +1,5 @@
 Product Owner: Nishcal (nish)
-Data Engineer: Siddhartha (Fragrance)
-Data Scientist:  
+
 # Web scraper for THE KATHMANDU POST
 
 to run the program do: **python .\main.py**
