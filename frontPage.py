@@ -94,7 +94,6 @@ def article_scrape(driver, datafile):
     article_path = '/html/body/div[3]/main/div/div[2]/div[1]'
     author_path = '/html/body/div[3]/main/div/div[2]/div[1]/div/div/h5'
 
-    '/html/body/div[3]/main/div[2]/div/div'
 
     if check_exists_by_xpath(article_path, driver) == False:
         visual_article(driver, datafile)

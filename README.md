@@ -3,7 +3,18 @@
 to run the program do: **python .\main.py**
 
 the program will create a directory in the current directory. 
-there will be files in the new directory that has all of the information that was scraped. 
+there will be files in the new directory that has all of the information that was scraped.
+
+in the .env file replace the information so that it stores the data into your server:
+    server = ''
+    database = ''
+    username1 = ''
+    password = ''
+
+store.py will ask "Is this your time saving to ssms? (yes/no)". 
+    if its your first time storing data say type "yes" then enter key
+        this will create the database tables. 
+    else say "no" then enter key
 
 WARNING: 
 

@@ -139,6 +139,7 @@ for file in fileNames:
             elif count == 3:
                 title_img_src = line_stripped
             elif (count == 4):
+                article_count = article_count + 1
                 cursor.execute(''' 
                     INSERT INTO articles values 
                     (
@@ -163,7 +164,6 @@ file_location = directoryName + chr(92) + "main.txt"
 datafile = open(file_location, 'r', encoding='utf-8')
 lines = datafile.readlines()
 count = 0
-article_count = 0
 for line in lines:
     line_stripped = line.strip()
     
@@ -208,5 +208,7 @@ for line in lines:
 
     if (count > 6):
         count = 0
-    
+
+
+print(article_count)
 
