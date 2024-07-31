@@ -2,7 +2,9 @@ Product Owner: Nishcal (nish)
 Data Engineer: Siddhartha Regmi (Siddy)
 # Web scraper for THE KATHMANDU POST
 
-to run the program do: **python .\main.py**
+To run the program do: **python .\main.py**
+
+THIS PROGRAM WAS BUILT USING PYTHON 3.11.5 
 
 the program will create a directory in the current directory. 
 there will be files in the new directory that has all of the information that was scraped.
