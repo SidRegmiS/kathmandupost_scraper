@@ -32,6 +32,7 @@ def getImageSrc(image_element):
     else:
         return check_src
 
+#this function retuns the link in the webelement
 def get_all_links(xpath, driver):
     links = []
     aTags = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'a')
@@ -41,6 +42,7 @@ def get_all_links(xpath, driver):
     
     return links
 
+#this function gets the links on h3 webelements
 def get_h3_links(xpath, driver):
     links = []
     h3Tags = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'h3')
@@ -49,7 +51,7 @@ def get_h3_links(xpath, driver):
         links.append(h3Tags[i].find_element(By.TAG_NAME, 'a').get_attribute('href'))
 
     return links
-
+#this function gets the links on h5 webelements
 def get_h5_links(xpath, driver):
     links = []
 
@@ -62,6 +64,7 @@ def get_h5_links(xpath, driver):
 
     return links
 
+#this only retuns the first link in a webelement
 def get_first_aTag_updates(xpath, driver):
     articles = driver.find_element(By.XPATH, xpath).find_elements(By.TAG_NAME, 'article')
 
@@ -73,14 +76,14 @@ def get_first_aTag_updates(xpath, driver):
     return link_to_article
 
 
-
+#this checks if a xpath exists
 def check_exists_by_xpath(xpath, driver):
     try:
         driver.find_element(By.XPATH, xpath)
     except NoSuchElementException:
         return False
     return True 
-
+#this check if a web-element exists by name
 def check_exists_by_tagName(driver, name):
     try:
         driver.find_element(By.TAG_NAME, name)
@@ -89,7 +92,7 @@ def check_exists_by_tagName(driver, name):
     return True
 
 
-
+#this functions is what is used to store information to a file
 def article_scrape(driver, datafile):
     article_path = '/html/body/div[3]/main/div/div[2]/div[1]'
     author_path = '/html/body/div[3]/main/div/div[2]/div[1]/div/div/h5'
@@ -129,6 +132,7 @@ def article_scrape(driver, datafile):
 
     datafile.write("\n" +section + "\n" + title+ "\n" + title_sub+ "\n" + getImageSrc(img_element)+ "\n" + fig_caption + "\n" + author + "\n")
 
+#this one is special for visual articles on the website
 def visual_article(driver, datafile):
     article_path = '/html/body/div[3]/main/div[2]/div/div'
     author_path = '/html/body/div[3]/main/div[2]/div/div/div[2]/div/h5'
@@ -204,6 +208,7 @@ trending_links = get_all_links(trending_topics_xpath, driver)
 datafile.write("***TRENDING TOPICS***")
 print('***TRENDING TOPICS***')
 
+#scrape all the trending artilces 
 for link in trending_links:
     print(link)
     driver.get(link)
@@ -212,12 +217,12 @@ for link in trending_links:
 driver.get(site)
 
 
-
+#scrape all the main aritcles 
 datafile.write("***MAIN ARTICLES***")
 print('***MAIN ARTICLES***')
 
 main_articles_xpath = '/html/body/div[4]/main/div/div[2]'
-
+#need to use h3 links because the articles are linked to clicking the titles
 article_links = get_h3_links(main_articles_xpath, driver)
 
 for link in article_links:
@@ -225,8 +230,9 @@ for link in article_links:
     driver.get(link)
     article_scrape(driver, datafile)
 
-
 driver.get(site)
+
+#scrpate the latest updates sections
 datafile.write("***LATEST UPDATES***")
 print('***LATEST UPDATES***')
 updates_xpath = '/html/body/div[4]/main/div/div[6]/div/div[3]'
@@ -242,7 +248,7 @@ for link in updates_links:
 driver.get(site)
 
 
-
+#scrape the most read sections
 most_read_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[1]/div'
 
 datafile.write("***MOST READ***")
@@ -257,6 +263,7 @@ for link in most_read_links:
 
 driver.get(site)
 
+#scrape the editors picks sections
 editors_picks_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[3]/div'
 
 editors_picks_links = get_h5_links(editors_picks_xpath, driver)
@@ -271,7 +278,7 @@ for link in editors_picks_links:
 
 driver.get(site)
 
-
+#scrape the editors picks sections 
 
 culture_arts_xpath = '/html/body/div[4]/main/div/div[9]/div[3]'
 
@@ -288,6 +295,7 @@ for link in culture_arts_links:
 driver.get(site)
 
 
+#this part is for scrapting the all news sections
 all_news_xpath = '/html/body/div[4]/main/div/div[11]/div/div[1]/div/article/ul'
 
 news_class_list = driver.find_elements(By.CLASS_NAME, 'block-newsCat--list')

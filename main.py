@@ -26,14 +26,14 @@ if(not main_scaper_done):
     print("running frontPage.py")
     os.system("python frontPage.py")
    
-
+#this is for checking if a visual-stories exists. if it doesnt then run other.py
 other_page_datafile_exists = os.path.exists(os.path.join(os.getcwd(), directoryName,  "visual-stories.txt"))
 if (not other_page_datafile_exists):
     print("running other.py")
     os.system("python other.py")
 
-
+#ask user if they want to store data into a ssms databse
 store_yes = input("do you want to store data? (yes/no)")
-
+#if yes then run python store.py
 if store_yes == 'yes':
     os.system("python store.py")

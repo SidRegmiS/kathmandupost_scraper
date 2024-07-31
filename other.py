@@ -93,8 +93,8 @@ driver = webdriver.Chrome(
     # other properties...
 )
 
-# visit your target site
-
+# visit your target sites
+#this part if for visiting all the links in the nav-bar of the main paoge
 sites = [
     'https://kathmandupost.com/opinion',
     'https://kathmandupost.com/national',
@@ -113,7 +113,7 @@ sites = [
     'https://kathmandupost.com/interviews',
     'https://kathmandupost.com/visual-stories'
 ]
-
+#the files we need to create 
 fileNames = [
     'opinion.txt',
     'national.txt',
@@ -133,6 +133,7 @@ fileNames = [
     'visual-stories.txt'
 ]
 #'travel.txt' -> TRAVEL
+#make the names at the top of the file related to the filesnames
 names = [sub[: -4].upper() for sub in fileNames]
 
 date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime('%d')+ '-' +time.strftime('%H')
@@ -145,7 +146,10 @@ xpath2 = '/html/body/div[4]/main/div[2]/div/div/div[1]'
 
 ul_xpath = '/html/body/div[3]/main/div/ul'
 
-
+#create a file print the name of the file 
+#scrape page 
+#check if there are links to other articles 
+#scrape all the other articles 
 for i in range(len(sites)):
     
     name = names[i]

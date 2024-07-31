@@ -6,7 +6,7 @@ import sys
 import os
 
 from dotenv import load_dotenv
-
+#load stuff from your env file 
 load_dotenv()
 
 server = os.getenv('server')
@@ -29,7 +29,7 @@ cnxn.setdecoding(pyodbc.SQL_WCHAR, encoding='utf8')
 cnxn.setencoding(encoding='utf8')
 """
 
-
+#check if the user needs to create tables for them to strore their data.
 cursor = cnxn.cursor()
 
 new_tables_check = input("Is this your time saving to ssms? (yes/no)")
@@ -65,7 +65,7 @@ if (new_tables_check == 'yes'):
         print("ERROR: Failed creating tables. The tables may already exist.")
         sys.exit() 
 
-
+#these are all the files that the store.py has to vist.
 fileNames = [
     'national.txt',
     'politcs.txt',
@@ -85,6 +85,7 @@ fileNames = [
     'visual-stories.txt'
 ]
 
+#sections for the main page
 main_page_sections = [
     '***TRENDING TOPICS***',
     '***MAIN ARTICLES***',
@@ -105,11 +106,18 @@ title_img_src = ""
 title_img_caption = ""
 author = ""
 
+#where the files are is in direcotry name
 date_hour = time.strftime("%Y") + '-' + time.strftime("%m")+ '-' + time.strftime('%d')+ '-' +time.strftime('%H')
 directoryName = "./" + date_hour + "_dir"
 
 #file_location = directoryName + chr(92) + "main.txt"
 #datafile = open(file_location, 'r', encoding='utf-8')
+
+#loop struct
+#open a file
+#read all the lines
+    #store all the lines into the database table properly 
+    #  
 article_count = 0
 for file in fileNames:
     file_location = directoryName + chr(92) + file
@@ -121,7 +129,7 @@ for file in fileNames:
         line_stripped = line.strip()
 
         skip = 0
-
+        #if a line starts with * that menas that is is a new sections
         if line[0] == '*':
             #print(line_stripped)
             section = line_stripped[1:]
@@ -129,6 +137,7 @@ for file in fileNames:
             count = 0
             skip = 1
 
+        #if it is not a new sections then check if the which part of the article is being read. using the count variable
         if skip != 1:
             if count == 0:
                 title = line_stripped
@@ -150,6 +159,7 @@ for file in fileNames:
                         ?     
                     )
                     ''', section, title, sub_title, title_img_src, author)
+                #ADD THE ARICLE TO THE DATABASE
                 cursor.commit()
                 #print(section, title, author, sub_title, title_img_src)
                 
@@ -159,7 +169,7 @@ for file in fileNames:
             if count > 4:
                 count = 0
                 
-
+#this is doing the same thing as above but for the main.txt file
 file_location = directoryName + chr(92) + "main.txt"
 datafile = open(file_location, 'r', encoding='utf-8')
 lines = datafile.readlines()
