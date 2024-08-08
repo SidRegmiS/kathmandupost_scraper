@@ -99,7 +99,7 @@ def article_scrape(driver, datafile):
 
 
     if check_exists_by_xpath(article_path, driver) == False:
-        visual_article(driver, datafile)
+        print("Warning, path did not exists. skipping article")
         return
 
     article_driver = driver.find_element(By.XPATH, article_path)
@@ -249,7 +249,8 @@ driver.get(site)
 
 
 #scrape the most read sections
-most_read_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[1]/div'
+most_read_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[2]'
+
 
 datafile.write("***MOST READ***")
 print('***MOST READ***')
@@ -264,7 +265,7 @@ for link in most_read_links:
 driver.get(site)
 
 #scrape the editors picks sections
-editors_picks_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[3]/div'
+editors_picks_xpath = '/html/body/div[4]/main/div/div[6]/div/div[4]/div[4]'
 
 editors_picks_links = get_h5_links(editors_picks_xpath, driver)
 
